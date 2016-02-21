@@ -17,4 +17,24 @@ RSpec.describe 'ShortenedUrls', type: :request do
       end
     end
   end
+
+  describe 'POST /u' do
+    subject(:post_url) { post shortened_urls_path, params: { shortened_url: { original_url: original_url } } }
+
+    context 'when invalid url is given' do
+      let(:original_url) { 'INVALID_URL_STRING' }
+      it 'should raise bad request' do
+        expect { post_url }.to raise_error ActionController::BadRequest
+      end
+    end
+
+    context 'when valid url is given' do
+      let(:original_url) { 'http://new.example.com' }
+      it 'should return valid json' do
+        post_url
+        json = JSON.parse(response.body)
+        expect(json['result']['shortened_url']['original_url']).to eq original_url
+      end
+    end
+  end
 end

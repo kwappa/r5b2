@@ -5,20 +5,15 @@ class ShortenedUrlsController < ApplicationController
     redirect_to @shortened_url.original_url
   end
 
-  # POST /shortened_urls
-  # POST /shortened_urls.json
   def create
     @shortened_url = ShortenedUrl.new(shortened_url_params)
 
-    respond_to do |format|
-      if @shortened_url.save
-        format.html { redirect_to @shortened_url, notice: 'Shortened url was successfully created.' }
-        format.json { render :show, status: :created, location: @shortened_url }
-      else
-        format.html { render :new }
-        format.json { render json: @shortened_url.errors, status: :unprocessable_entity }
-      end
+    if @shortened_url.save
+      render :show, formats: [:json], handlers: [:jbuilder]
+    else
+      raise ActionController::BadRequest
     end
+
   end
 
   private
