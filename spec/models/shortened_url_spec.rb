@@ -3,8 +3,13 @@ require 'rails_helper'
 RSpec.describe ShortenedUrl, type: :model do
   describe 'validate :original_url' do
     shared_examples 'accept valid url' do
-      specify { expect(described_class.new(original_url: url)).to be_valid }
+      specify do
+        shortened_url = described_class.new(original_url: url)
+        expect(shortened_url).to be_valid
+        expect(shortened_url.hashed_url).to be_present
+      end
     end
+
     shared_examples 'reject invalid url' do
       specify { expect(described_class.new(original_url: url)).not_to be_valid }
     end
