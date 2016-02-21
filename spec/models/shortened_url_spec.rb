@@ -1,5 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe ShortenedUrl, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validate :original_url' do
+    shared_examples 'accept valid url' do
+      specify { expect(described_class.new(original_url: url)).to be_valid }
+    end
+    shared_examples 'reject invalid url' do
+      specify { expect(described_class.new(original_url: url)).not_to be_valid }
+    end
+
+    context 'when empty original_url is given' do
+      let(:url) { '' }
+      include_examples 'reject invalid url'
+    end
+
+    context 'when invalid original_url is given' do
+      let(:url) { 'INVALID_URL' }
+      include_examples 'reject invalid url'
+    end
+
+    context 'when valid original_url is given' do
+      let(:url) { 'http://valid-url.example.com' }
+      include_examples 'accept valid url'
+    end
+  end
 end
