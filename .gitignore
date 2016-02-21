@@ -9,6 +9,7 @@
 !/tmp/.keep
 
 .byebug_history
+.rspec
 
 /vendor/bundle/
 .DS_Store
